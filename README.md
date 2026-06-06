@@ -33,12 +33,8 @@ resources) and across the three methods.
 ├── report/
 │   └── experiment_report.md
 ├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── run_q1.sh
-├── run_q2.sh
-├── run_analysis.sh
-└── run_all.sh
+├── docker-compose.yml 
+└── requirements.txt
 ```
 
 ---
@@ -95,14 +91,8 @@ If no ID column is found, IDs are generated automatically
 ---
 
 ## Running the Benchmarks
-
-### Option A — Run everything automatically
-
-```bash
-bash run_all.sh
-```
-
-### Option B — Step by step
+ 
+### Step by step
 
 ```bash
 # 1. Build the Docker image
@@ -182,50 +172,7 @@ python src/analyze_q2.py
 | `q2_boxplot.png` | Boxplot with jitter |
 | `q2_assignment_sample.csv` | First 100 assignment rows (last method, last run) |
 
----
-
-## Interpreting the Statistical Results
-
-### Question 1 — p-value interpretation
-
-Open `results/q1/q1_statistical_tests.csv` and look at the `p_value` column.
-
-| p-value | Meaning |
-|---------|---------|
-| p < 0.05 | **Significant** — the two containers have different execution-time distributions |
-| p ≥ 0.05 | **Not significant** — no strong evidence of a difference |
-
-The `test_used` column tells you whether **Welch's t-test** (both groups
-normally distributed) or **Mann-Whitney U** (at least one non-normal) was used.
-
-### Question 2 — p-value interpretation
-
-Open `results/q2/q2_statistical_tests.csv`.
-
-| p-value | Meaning |
-|---------|---------|
-| p < 0.05 | **Significant** — at least one method has a different distribution |
-| p ≥ 0.05 | **Not significant** — no strong evidence of differences |
-
-If significant, open `results/q2/q2_posthoc_tests.csv` and check
-`p_bonferroni` for each pair.  A value < 0.05 means that specific pair is
-significantly different after Bonferroni correction.
-
----
-
-## Submittable Files
-
-Include all files in the project folder **plus** the generated contents of
-`results/q1/` and `results/q2/` after running the full pipeline.  Key
-deliverables:
-
-- `report/experiment_report.md` (fill in the generated p-values)
-- All PNG plots in `results/q1/` and `results/q2/`
-- All CSV tables in `results/q1/` and `results/q2/`
-- Source code in `src/`
-- `Dockerfile` + `docker-compose.yml`
-
----
+--- 
 
 ## Dependencies
 
