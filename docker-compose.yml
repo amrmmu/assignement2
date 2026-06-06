@@ -1,0 +1,77 @@
+# Docker Compose configuration for the Vaccination Centre Assignment Benchmark
+#
+# Resource limits use BOTH the Compose v2-style top-level fields (cpus,
+# mem_limit) AND the Compose v3 deploy.resources.limits block so the
+# constraints work regardless of which Compose version is installed.
+#
+# Usage:
+#   docker compose build
+#   docker compose run --rm computer1
+#   docker compose run --rm computer2
+#   docker compose run --rm q2_methods
+#   docker compose run --rm analysis
+
+services:
+
+  # ── Question 1 — stronger container (simulates Computer 1) ──────────────
+  computer1:
+    build: .
+    # Compose v2 compatible fields
+    cpus: "4.0"
+    mem_limit: 4g
+    # Compose v3 / Swarm-compatible fields (duplicated for portability)
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4g
+    volumes:
+      - ./results:/app/results
+    environment:
+      - COMPUTER_NAME=computer1
+      - PYTHONPATH=/app/src
+    command: python src/benchmark_q1.py --computer computer1
+
+  # ── Question 1 — weaker container (simulates Computer 2) ────────────────
+  computer2:
+    build: .
+    cpus: "1.0"
+    mem_limit: 512m
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512m
+    volumes:
+      - ./results:/app/results
+    environment:
+      - COMPUTER_NAME=computer2
+      - PYTHONPATH=/app/src
+    command: python src/benchmark_q1.py --computer computer2
+
+  # ── Question 2 — all three methods on a strong container ────────────────
+  q2_methods:
+    build: .
+    cpus: "4.0"
+    mem_limit: 4g
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 4g
+    volumes:
+      - ./results:/app/results
+    environment:
+      - PYTHONPATH=/app/src
+    command: python src/benchmark_q2.py
+
+  # ── Analysis — post-process benchmark results ────────────────────────────
+  # Run AFTER all benchmark services have completed.
+  analysis:
+    build: .
+    volumes:
+      - ./results:/app/results
+    environment:
+      - PYTHONPATH=/app/src
+    command: >
+      bash -c "python src/analyze_q1.py && python src/analyze_q2.py"

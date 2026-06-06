@@ -1,0 +1,4 @@
+pair,test,statistic,p_raw,p_bonferroni,significant_after_correction
+method1 vs method2,Mann-Whitney U,2500.0,7.066071930388932e-18,2.1198215791166794e-17,True
+method1 vs method3,Mann-Whitney U,2500.0,7.066071930388932e-18,2.1198215791166794e-17,True
+method2 vs method3,Mann-Whitney U,2500.0,7.066071930388932e-18,2.1198215791166794e-17,True
